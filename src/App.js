@@ -1,23 +1,102 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
+const drumPad = [
+  {
+    keyCode: 81,
+    key: 'Q',
+    id: 'Heater-1',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3'
+  },
+  {
+    keyCode: 87,
+    key: 'W',
+    id: 'Heater-2',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3'
+  },
+  {
+    keyCode: 69,
+    key: 'E',
+    id: 'Heater-3',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3'
+  },
+  {
+    keyCode: 65,
+    key: 'A',
+    id: 'Heater-4',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3'
+  },
+  {
+    keyCode: 83,
+    key: 'S',
+    id: 'Clap',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3'
+  },
+  {
+    keyCode: 68,
+    key: 'D',
+    id: 'Open-hh',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3'
+  },
+  {
+    keyCode: 90,
+    key: 'Z',
+    id: 'Kick-n-hat',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3'
+  },
+  {
+    keyCode: 88,
+    key: 'X',
+    id: 'Kick',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3'
+  },
+  {
+    keyCode: 67,
+    key: 'C',
+    id: 'Closed-hh',
+    url: 'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
+  }
+];
+
 function App() {
+  const [activeKey, setActiveKey] = useState('');
+
+  useEffect(() => {
+    document.addEventListener('keydown', (event) => {
+      playSound(event.key.toUpperCase());
+    });
+  }, []);
+
+  const playSound = (selector) => {
+    const audio = document.getElementById(selector);
+    audio.play();
+    setActiveKey(selector);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div id="drum-machine">
+        <div id="display">{activeKey}</div>
+        <div className="drum-pads">
+          {drumPad.map((drumPad) => (
+            <div
+              key={drumPad.key}
+              onClick={() => {
+                playSound(drumPad.key);
+              }}
+              className="drum-pad"
+              id={drumPad.id}
+            >
+              {drumPad.key}
+              <audio
+                className="clip"
+                id={drumPad.key}
+                src={drumPad.url}
+              ></audio>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
